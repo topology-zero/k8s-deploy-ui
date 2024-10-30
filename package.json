@@ -1,0 +1,46 @@
+{
+    "name": "vite-vue-starter",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "dev": "vite",
+        "build:prod": "vite build",
+        "build:stage": "vite build --mode staging",
+        "lint": "vite lint",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@codemirror/lang-yaml": "^6.1.1",
+        "@wangeditor/editor": "^5.1.23",
+        "@wangeditor/editor-for-vue": "^5.1.12",
+        "axios": "^1.5.0",
+        "echarts": "^5.5.0",
+        "element-plus": "^2.3.12",
+        "normalize.css": "^8.0.1",
+        "nprogress": "^0.2.0",
+        "numeral": "^2.0.6",
+        "path-browserify": "^1.0.1",
+        "path-to-regexp": "^6.2.1",
+        "pinia": "^2.1.6",
+        "pinia-plugin-persistedstate": "^3.2.0",
+        "vue": "^3.4.15",
+        "vue-codemirror": "^6.1.1",
+        "vue-echarts": "^6.6.9",
+        "vue-router": "^4.2.4"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^4.2.3",
+        "eslint": "^8.49.0",
+        "eslint-plugin-vue": "^9.25.0",
+        "fast-glob": "^3.3.1",
+        "rollup-plugin-visualizer": "^5.9.2",
+        "sass": "^1.66.1",
+        "svgo": "^3.0.2",
+        "unplugin-auto-import": "^0.16.6",
+        "unplugin-vue-components": "^0.25.2",
+        "vite": "^4.4.9",
+        "vite-plugin-compression": "^0.5.1",
+        "vite-plugin-eslint": "^1.8.1",
+        "vite-plugin-svg-icons": "^2.0.1"
+    }
+}
