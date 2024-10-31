@@ -97,7 +97,11 @@ const defaultFormData = () => ({
     git: '',
     userName: '',
     token: '',
-    useTag: ''
+    useTag: '',
+    params: [
+        { name: 'app_name', value: '' },
+        { name: 'port', value: '8888' }
+    ]
 })
 
 // data

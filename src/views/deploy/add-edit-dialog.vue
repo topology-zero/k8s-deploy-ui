@@ -42,7 +42,7 @@
                                      prop="name">
                         <template #default="{row}">
                             <el-input v-model="row.name"
-                                      :disabled="row.name == 'tag'"
+                                      :disabled="row.name == 'tag' || row.name == 'namespace' "
                                       size="small" />
                         </template>
                     </el-table-column>
@@ -50,7 +50,7 @@
                                      label="参数值"
                                      prop="desc">
                         <template #default="{row}">
-                            <el-select v-if="row.name == 'tag'"
+                            <el-select v-if="row.name == 'tag' || row.name == 'namespace' "
                                        size="small"
                                        v-model="row.value"
                                        style="width:100%">
@@ -106,6 +106,13 @@ const formData = defineModel('formData', { type: Object })
 const elFormRef = ref()
 const submitForm = async () => {
     await elFormRef.value.validate()
+
+    for (const i in formData.value.params) {
+        if (formData.value.params[i].name == '' || formData.value.params[i].value == '') {
+            return ElMessage.error('参数名和参数值必填')
+        }
+    }
+
     await add(formData.value)
     visible.value = false
     ElMessage.success('成功')

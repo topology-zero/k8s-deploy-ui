@@ -41,6 +41,54 @@
                               border>使用指定 tag</el-radio>
                 </el-radio-group>
             </el-form-item>
+            <el-form-item label="预设变量">
+                <el-button type="success"
+                           size="small"
+                           @click="formData.params.push({})">新增</el-button>
+                <el-table border
+                          style="margin-top: 10px;"
+                          size="small"
+                          :data="formData.params">
+                    <el-table-column align="center"
+                                     label="参数名"
+                                     prop="name">
+                        <template #default="{row}">
+                            <el-input v-model="row.name"
+                                      :disabled="row.name == 'tag'"
+                                      size="small" />
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="center"
+                                     label="参数值"
+                                     prop="desc">
+                        <template #default="{row}">
+                            <el-select v-if="row.name == 'tag'"
+                                       size="small"
+                                       v-model="row.value"
+                                       style="width:100%">
+                                <el-option v-for="val, key in row.options"
+                                           :key="key"
+                                           :label="val"
+                                           :value="val" />
+                            </el-select>
+                            <el-input v-else
+                                      v-model="row.value"
+                                      size="small" />
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="center"
+                                     width="170px"
+                                     label="操作">
+                        <template #default="{$index}">
+                            <el-button size="small"
+                                       type="danger"
+                                       @click="formData.params.splice($index, 1)">
+                                删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form-item>
         </el-form>
         <template #footer>
             <el-button @click="visible = false">取 消</el-button>
@@ -63,6 +111,13 @@ const formData = defineModel('formData', { type: Object })
 const elFormRef = ref()
 const submitForm = async () => {
     await elFormRef.value.validate()
+
+    for (const i in formData.value.params) {
+        if (formData.value.params[i].name == '' || formData.value.params[i].value == '') {
+            return ElMessage.error('参数名和参数值必填')
+        }
+    }
+
     if (formData.value.id == 0) {
         await add(formData.value)
     } else {
