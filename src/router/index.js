@@ -66,12 +66,12 @@ const router = createRouter({
         {
             path: '/namespace',
             component: Layout,
-            redirect: '/namespace',
+            redirect: '/namespace/index',
             name: 'namespace',
             meta: { title: '后台管理', icon: 'manage' },
             children: [
                 {
-                    path: '',
+                    path: 'index',
                     name: 'namespace-index',
                     permission: 'namespace',
                     component: () => import('@/views/namespace/index.vue'),
@@ -82,12 +82,12 @@ const router = createRouter({
         {
             path: '/project',
             component: Layout,
-            redirect: '/project',
+            redirect: '/project/index',
             name: 'project',
             meta: { title: '项目管理', icon: 'manage' },
             children: [
                 {
-                    path: '',
+                    path: 'index',
                     name: 'project-index',
                     permission: 'project',
                     component: () => import('@/views/project/index.vue'),
@@ -98,16 +98,40 @@ const router = createRouter({
         {
             path: '/template',
             component: Layout,
-            redirect: '/template',
+            redirect: '/template/index',
             name: 'template',
             meta: { title: '模板管理', icon: 'manage' },
             children: [
                 {
-                    path: '',
+                    path: 'index',
                     name: 'template-index',
                     permission: 'template',
                     component: () => import('@/views/template/index.vue'),
                     meta: { title: '模板管理', icon: 'user' }
+                }
+            ]
+        },
+        {
+            path: '/deploy',
+            component: Layout,
+            redirect: '/deploy/index',
+            name: 'deploy',
+            meta: { title: '部署管理', icon: 'manage' },
+            children: [
+                {
+                    path: 'index',
+                    name: 'deploy-index',
+                    permission: 'deploy',
+                    component: () => import('@/views/deploy/index.vue'),
+                    meta: { title: '部署管理', icon: 'user' }
+                },
+                {
+                    path: 'add',
+                    name: 'deploy-add',
+                    hidden: true,
+                    permission: 'deploy:add',
+                    component: () => import('@/views/deploy/new-deploy.vue'),
+                    meta: { title: '新上线', icon: 'user' }
                 }
             ]
         },

@@ -21,11 +21,10 @@
                              :model="params">
                         <el-form-item label="模板/描述"
                                       prop="name">
-                            <el-input v-model="params.name" />
+                            <el-input v-model="params.name"
+                                      clearable />
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="warning"
-                                       @click="handleReset()">重置</el-button>
                             <el-button type="primary"
                                        @click="_getData">查询</el-button>
                         </el-form-item>
@@ -88,7 +87,6 @@
 import { ref } from 'vue'
 import { getList, del } from './api'
 import { usePage } from '@/utils/mixin/page'
-import { useReset } from '@/utils/mixin/reset'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddEditDialog from './add-edit-dialog.vue'
 
@@ -141,10 +139,4 @@ const handleDel = async (info) => {
     ElMessage.success(message)
     _getData(params)
 }
-
-// 重置
-const {
-    queryFormRef,
-    handleReset
-} = useReset()
 </script>

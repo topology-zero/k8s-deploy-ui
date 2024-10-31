@@ -32,7 +32,7 @@ import useAppStore from '@/store/app'
 const appStore = useAppStore()
 const { sidebar } = appStore
 
-const title = '欧米伽'
+const title = 'K8S部署平台'
 const logo = 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
 </script>
 

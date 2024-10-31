@@ -2,15 +2,30 @@ import request from '@/utils/request'
 
 export function getRoles() {
     return request({
-        url: '/base/role',
-        method: 'get'
+        url: '/base/role'
     })
 }
 
 export function getAuths() {
     return request({
-        url: '/base/auth',
-        method: 'get'
+        url: '/base/auth'
     })
 }
 
+export function getProject() {
+    return request({
+        url: '/common/project'
+    })
+}
+
+export function getTemplate() {
+    return request({
+        url: '/common/template'
+    })
+}
+
+export function getProjectParams(id) {
+    return request({
+        url: '/common/project/params/' + id
+    })
+}

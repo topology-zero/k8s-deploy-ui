@@ -1,6 +1,6 @@
 <template>
     <el-config-provider :locale="locale"
-                        size="large">
+                        size="default">
         <div id="app">
             <router-view />
         </div>

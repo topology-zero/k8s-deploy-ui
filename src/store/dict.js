@@ -1,17 +1,21 @@
 import { defineStore } from 'pinia'
-import { getRoles, getAuths } from '@/api/common'
+import { getRoles, getAuths, getProject, getTemplate } from '@/api/common'
 
 // 数据字典
 export default defineStore('dict', {
     state: () => ({
         roleOptions: [],
-        authTreeData: []
+        authTreeData: [],
+        project: [],
+        template: []
     }),
     actions: {
         async getDict() {
             await Promise.all([
                 this.getRoles(),
-                this.getAuths()
+                this.getAuths(),
+                this.getProject(),
+                this.getTemplate()
             ])
         },
         async getRoles() {
@@ -21,6 +25,14 @@ export default defineStore('dict', {
         async getAuths() {
             const { data } = await getAuths()
             this.authTreeData = data
+        },
+        async getProject() {
+            const { data } = await getProject()
+            this.project = data
+        },
+        async getTemplate() {
+            const { data } = await getTemplate()
+            this.template = data
         }
     }
 })

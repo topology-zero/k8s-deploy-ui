@@ -10,7 +10,7 @@
                                size="default"
                                plain
                                @click="handleAdd()">
-                        添加项目
+                        新建上线单
                     </el-button>
                 </el-col>
                 <el-col :span="18">
@@ -19,7 +19,7 @@
                              style="float: right;"
                              size="default"
                              :model="params">
-                        <el-form-item label="项目/描述"
+                        <el-form-item label="上线单"
                                       prop="name">
                             <el-input v-model="params.name"
                                       clearable />
@@ -31,7 +31,6 @@
                     </el-form>
                 </el-col>
             </el-row>
-
         </div>
 
         <el-table v-loading="tableLoading"
@@ -43,11 +42,25 @@
                              align="center"
                              width="60px" />
             <el-table-column align="center"
-                             label="项目名"
-                             prop="name" />
+                             label="上线单"
+                             show-overflow-tooltip
+                             prop="deployName" />
             <el-table-column align="center"
-                             label="项目描述"
-                             prop="desc" />
+                             label="上线项目"
+                             show-overflow-tooltip
+                             prop="projectName" />
+            <el-table-column align="center"
+                             label="使用模板"
+                             show-overflow-tooltip
+                             prop="templateName" />
+            <el-table-column align="center"
+                             label="更新时间"
+                             width="180px"
+                             prop="updateTime" />
+            <el-table-column align="center"
+                             label="状态"
+                             width="100px"
+                             prop="status" />
             <el-table-column align="center"
                              width="170px"
                              label="操作">
@@ -55,7 +68,7 @@
                     <el-button v-permission="`admin:user:edit`"
                                size="small"
                                type="primary"
-                               @click="handleEdit(row)">编辑
+                               @click="handleDeploy(row)">上线
                     </el-button>
                     <el-button v-permission="`admin:user:del`"
                                size="small"
@@ -76,35 +89,17 @@
                            @size-change="handleSizeChange"
                            @current-change="handleCurrentChange" />
         </div>
-
-        <add-edit-dialog v-model:visible="dialogVisible"
-                         v-model:formData="formData"
-                         @done="_getData" />
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { getList, del } from './api'
+import { getList, deploy, del } from './api'
 import { usePage } from '@/utils/mixin/page'
+import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import AddEditDialog from './add-edit-dialog.vue'
 
-const defaultFormData = () => ({
-    id: 0,
-    name: '',
-    desc: '',
-    git: '',
-    userName: '',
-    token: '',
-    useTag: ''
-})
+const router = useRouter()
 
-// data
-const dialogVisible = ref(false)
-const formData = ref({})
-
-// mixin
 // 获取数据
 const _getData = async () => {
     tableLoading.value = true
@@ -125,19 +120,20 @@ const {
 
 // 添加项目
 const handleAdd = () => {
-    dialogVisible.value = true
-    formData.value = defaultFormData()
+    router.push('/deploy/add')
 }
 
 // 编辑项目
-const handleEdit = async (info) => {
-    dialogVisible.value = true
-    Object.assign(formData.value, info)
+const handleDeploy = async (info) => {
+    await ElMessageBox.confirm('是否确认上线', '警告')
+    const { message } = await deploy(info.id)
+    ElMessage.success(message)
+    _getData(params)
 }
 
 // 删除项目
 const handleDel = async (info) => {
-    await ElMessageBox.confirm('删除项目不可恢复', '警告')
+    await ElMessageBox.confirm('删除上线单不可恢复', '警告')
     const { message } = await del(info.id)
     ElMessage.success(message)
     _getData(params)

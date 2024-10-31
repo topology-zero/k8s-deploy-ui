@@ -10,7 +10,8 @@
                           prop="name">
                 <el-input v-model="formData.name" />
             </el-form-item>
-            <el-form-item label="项目名描述"
+            <el-form-item label="项目描述"
+                          :rules="{ required: true, trigger: 'blur', message: '请输入项目描述' }"
                           prop="desc">
                 <el-input v-model="formData.desc" />
             </el-form-item>
@@ -19,8 +20,13 @@
                           prop="git">
                 <el-input v-model="formData.git" />
             </el-form-item>
-            <el-form-item label="GIT令牌"
-                          :rules="{ required: formData.id == 0, trigger: 'blur', message: '请输入GIT令牌' }"
+            <el-form-item label="用户名"
+                          :rules="{ required: true, trigger: 'blur', message: '请输入用户名' }"
+                          prop="userName">
+                <el-input v-model="formData.userName" />
+            </el-form-item>
+            <el-form-item label="密码/token"
+                          :rules="{ required: formData.id == 0, trigger: 'blur', message: '请输入密码' }"
                           prop="token">
                 <el-input v-model="formData.token"
                           :placeholder="formData.id == 0 ? '' : '不填写则不修改'" />
