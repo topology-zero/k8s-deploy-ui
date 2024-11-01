@@ -41,6 +41,7 @@
             </el-dropdown>
         </div>
         <el-dialog v-model="showDialog"
+                   :close-on-click-modal="false"
                    title="修改登录密码"
                    width="30%">
             <el-form ref="elFormRef"

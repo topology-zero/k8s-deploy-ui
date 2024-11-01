@@ -1,6 +1,7 @@
 <template>
     <el-dialog title="添加命名空间"
                v-model="visible"
+               :close-on-click-modal="false"
                width="30%">
         <el-form ref="elFormRef"
                  :model="formData"

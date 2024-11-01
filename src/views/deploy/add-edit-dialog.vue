@@ -1,6 +1,7 @@
 <template>
     <el-dialog title="上线项目"
                v-model="visible"
+               :close-on-click-modal="false"
                width="50%">
         <el-form ref="elFormRef"
                  :model="formData"

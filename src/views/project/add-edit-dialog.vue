@@ -1,6 +1,7 @@
 <template>
     <el-dialog :title="formData.id == 0 ? '添加项目' : '编辑项目'"
                v-model="visible"
+               :close-on-click-modal="false"
                width="50%">
         <el-form ref="elFormRef"
                  :model="formData"
@@ -102,6 +103,9 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { add, edit } from './api'
+import useDictStore from '@/store/dict'
+
+const dictStore = useDictStore()
 
 const emit = defineEmits(['done'])
 const visible = defineModel('visible', { type: Boolean })
@@ -125,6 +129,7 @@ const submitForm = async () => {
     }
     visible.value = false
     emit('done')
+    dictStore.getProject()
     ElMessage.success('成功')
 }
 </script>

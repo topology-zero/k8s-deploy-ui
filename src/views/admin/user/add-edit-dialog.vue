@@ -1,6 +1,7 @@
 <template>
     <el-dialog :title="formData.id == 0 ? '添加用户' : '编辑用户'"
                v-model="visible"
+               :close-on-click-modal="false"
                width="30%">
         <el-form ref="elFormRef"
                  :model="formData"

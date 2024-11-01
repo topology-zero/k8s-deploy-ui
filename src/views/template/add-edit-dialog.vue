@@ -1,5 +1,6 @@
 <template>
     <el-dialog :title="formData.id == 0 ? '添加模板' : '编辑模板'"
+               :close-on-click-modal="false"
                v-model="visible"
                width="50%">
         <el-form ref="elFormRef"
@@ -33,6 +34,9 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import YamlEditor from '@/components/YamlEditor/index.vue'
 import { add, edit } from './api'
+import useDictStore from '@/store/dict'
+
+const dictStore = useDictStore()
 
 const emit = defineEmits(['done'])
 const visible = defineModel('visible', { type: Boolean })
@@ -49,6 +53,7 @@ const submitForm = async () => {
     }
     visible.value = false
     emit('done')
+    dictStore.getTemplate()
     ElMessage.success('成功')
 }
 </script>

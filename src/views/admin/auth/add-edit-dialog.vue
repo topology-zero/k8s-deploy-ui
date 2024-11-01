@@ -1,5 +1,6 @@
 <template>
     <el-dialog v-model="visible"
+               :close-on-click-modal="false"
                :title="formData.id == 0 ? '添加权限' : '编辑权限'">
         <el-form ref="elFormRef"
                  :model="formData"
