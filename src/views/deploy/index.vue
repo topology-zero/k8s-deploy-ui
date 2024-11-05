@@ -60,15 +60,27 @@
             <el-table-column align="center"
                              label="状态"
                              width="100px"
-                             prop="status" />
+                             prop="status">
+                <template #default="{row}">
+                    <el-tag v-if="row.status==0"
+                            type="warning">待上线</el-tag>
+                    <el-tag v-if="row.status==1"
+                            type="primary">上线中</el-tag>
+                    <el-tag v-if="row.status==2"
+                            type="success">上线成功</el-tag>
+                    <el-tag v-if="row.status==3"
+                            type="danger">上线失败</el-tag>
+                </template>
+            </el-table-column>
             <el-table-column align="center"
                              width="170px"
                              label="操作">
                 <template #default="{row}">
                     <el-button v-permission="`admin:user:edit`"
                                size="small"
+                               :loading="row.status == 1"
                                type="primary"
-                               @click="handleDeploy(row)">上线
+                               @click="handleDeploy(row)">{{ row.status == 2 ?'查看':'上线'}}
                     </el-button>
                     <el-button v-permission="`admin:user:del`"
                                size="small"
@@ -89,16 +101,23 @@
                            @size-change="handleSizeChange"
                            @current-change="handleCurrentChange" />
         </div>
+
+        <DoDeploy v-model:visible="deployDialog"
+                  v-model:formData="deployData" />
     </div>
 </template>
 
 <script setup>
-import { getList, deploy, del } from './api'
+import { ref } from 'vue'
+import { getList, del } from './api'
 import { usePage } from '@/utils/mixin/page'
+import { registerNotify, useWebsocket } from '@/utils/mixin/websocket'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import DoDeploy from './do-deploy.vue'
 
 const router = useRouter()
+const { websocketTarget, message } = useWebsocket()
 
 // 获取数据
 const _getData = async () => {
@@ -108,6 +127,9 @@ const _getData = async () => {
     total.value = data.total
     tableLoading.value = false
 }
+
+registerNotify('done', _getData)
+
 const {
     tableLoading,
     list,
@@ -123,12 +145,15 @@ const handleAdd = () => {
     router.push('/deploy/add')
 }
 
-// 编辑项目
+// 上线项目
+const deployDialog = ref(false)
+const deployData = ref({})
 const handleDeploy = async (info) => {
-    await ElMessageBox.confirm('是否确认上线', '警告')
-    const { message } = await deploy(info.id)
-    ElMessage.success(message)
-    _getData(params)
+    deployDialog.value = true
+    deployData.value = info
+    if (!message.value.has(info.id)) {
+        websocketTarget.value.send(`{"msgType":"init","data":${info.id}}`)
+    }
 }
 
 // 删除项目

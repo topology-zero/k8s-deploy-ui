@@ -18,7 +18,8 @@ export function add(data) {
 export function deploy(id) {
     return request({
         url: '/deploy/deploy/' + id,
-        method: 'post'
+        method: 'post',
+        timeout: 0
     })
 }
 

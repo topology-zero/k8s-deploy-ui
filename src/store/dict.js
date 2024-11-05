@@ -7,7 +7,7 @@ export default defineStore('dict', {
         roleOptions: [],
         authTreeData: [],
         project: [],
-        template: []
+        templates: []
     }),
     actions: {
         async getDict() {
@@ -32,7 +32,7 @@ export default defineStore('dict', {
         },
         async getTemplate() {
             const { data } = await getTemplate()
-            this.template = data
+            this.templates = data
         }
     }
 })

@@ -24,7 +24,7 @@
                           prop="templateId">
                 <el-select v-model="formData.templateId"
                            style="width:100%">
-                    <el-option v-for="val, key in template"
+                    <el-option v-for="val, key in templates"
                                :key="key"
                                :label="val.name"
                                :value="val.id" />
@@ -55,6 +55,11 @@
                                        size="small"
                                        v-model="row.value"
                                        style="width:100%">
+                                <template #header>
+                                    <el-input placeholder="自定义"
+                                              size="small"
+                                              v-model="row.value" />
+                                </template>
                                 <el-option v-for="val, key in row.options"
                                            :key="key"
                                            :label="val"
@@ -98,7 +103,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const dictStore = useDictStore()
-const { template } = storeToRefs(dictStore)
+const { templates } = storeToRefs(dictStore)
 
 const visible = defineModel('visible', { type: Boolean })
 const formData = defineModel('formData', { type: Object })
