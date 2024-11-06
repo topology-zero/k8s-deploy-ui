@@ -5,7 +5,7 @@
             <el-row :gutter="20"
                     justify="space-between">
                 <el-col :span="6">
-                    <el-button v-permission="`admin:user:add`"
+                    <el-button v-permission="`template:add`"
                                type="primary"
                                size="default"
                                plain
@@ -52,12 +52,12 @@
                              width="170px"
                              label="操作">
                 <template #default="{row}">
-                    <el-button v-permission="`admin:user:edit`"
+                    <el-button v-permission="`template:edit`"
                                size="small"
                                type="primary"
                                @click="handleEdit(row)">编辑
                     </el-button>
-                    <el-button v-permission="`admin:user:del`"
+                    <el-button v-permission="`template:del`"
                                size="small"
                                type="danger"
                                @click="handleDel(row)">

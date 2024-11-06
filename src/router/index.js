@@ -68,14 +68,15 @@ const router = createRouter({
             component: Layout,
             redirect: '/namespace/index',
             name: 'namespace',
-            meta: { title: '后台管理', icon: 'manage' },
+            permission: 'namespace',
+            meta: { title: '命名空间管理', icon: 'ns' },
             children: [
                 {
                     path: 'index',
                     name: 'namespace-index',
                     permission: 'namespace',
                     component: () => import('@/views/namespace/index.vue'),
-                    meta: { title: '命名空间管理', icon: 'user' }
+                    meta: { title: '命名空间管理', icon: 'ns' }
                 }
             ]
         },
@@ -84,14 +85,15 @@ const router = createRouter({
             component: Layout,
             redirect: '/project/index',
             name: 'project',
-            meta: { title: '项目管理', icon: 'manage' },
+            permission: 'project',
+            meta: { title: '项目管理', icon: 'project' },
             children: [
                 {
                     path: 'index',
                     name: 'project-index',
                     permission: 'project',
                     component: () => import('@/views/project/index.vue'),
-                    meta: { title: '项目管理', icon: 'user' }
+                    meta: { title: '项目管理', icon: 'project' }
                 }
             ]
         },
@@ -100,14 +102,15 @@ const router = createRouter({
             component: Layout,
             redirect: '/template/index',
             name: 'template',
-            meta: { title: '模板管理', icon: 'manage' },
+            permission: 'template',
+            meta: { title: '模板管理', icon: 'template' },
             children: [
                 {
                     path: 'index',
                     name: 'template-index',
                     permission: 'template',
                     component: () => import('@/views/template/index.vue'),
-                    meta: { title: '模板管理', icon: 'user' }
+                    meta: { title: '模板管理', icon: 'template' }
                 }
             ]
         },
@@ -116,14 +119,15 @@ const router = createRouter({
             component: Layout,
             redirect: '/deploy/index',
             name: 'deploy',
-            meta: { title: '部署管理', icon: 'manage' },
+            permission: 'deploy',
+            meta: { title: '部署管理', icon: 'deploy' },
             children: [
                 {
                     path: 'index',
                     name: 'deploy-index',
                     permission: 'deploy',
                     component: () => import('@/views/deploy/index.vue'),
-                    meta: { title: '部署管理', icon: 'user' }
+                    meta: { title: '部署管理', icon: 'deploy' }
                 },
                 {
                     path: 'add',
@@ -131,7 +135,7 @@ const router = createRouter({
                     hidden: true,
                     permission: 'deploy:add',
                     component: () => import('@/views/deploy/new-deploy.vue'),
-                    meta: { title: '新上线', icon: 'user' }
+                    meta: { title: '新上线', icon: 'deploy' }
                 }
             ]
         },

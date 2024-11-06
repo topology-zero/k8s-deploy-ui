@@ -2,7 +2,7 @@
     <div class="app-container">
         <p class="page-title">命名空间列表</p>
         <div class="filter-container">
-            <el-button v-permission="`admin:user:add`"
+            <el-button v-permission="`namespace:add`"
                        type="primary"
                        size="default"
                        plain
@@ -21,7 +21,7 @@
                              width="170px"
                              label="操作">
                 <template #default="{row}">
-                    <el-button v-permission="`admin:user:del`"
+                    <el-button v-permission="`namespace:del`"
                                size="small"
                                type="danger"
                                @click="handleDel(row)">
@@ -65,15 +65,15 @@ const {
     params
 } = usePage(_getData)
 
-// 添加用户
+// 添加命名空间
 const handleAdd = () => {
     dialogVisible.value = true
     formData.value = defaultFormData()
 }
 
-// 删除用户
+// 删除命名空间
 const handleDel = async ({ name }) => {
-    await ElMessageBox.confirm('删除用户不可恢复', '警告')
+    await ElMessageBox.confirm('删除命名空间不可恢复', '警告')
     const { message } = await del({ name })
     ElMessage.success(message)
     _getData(params)

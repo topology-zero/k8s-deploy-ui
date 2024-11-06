@@ -1,11 +1,11 @@
 <template>
     <div class="app-container">
-        <p class="page-title">项目列表</p>
+        <p class="page-title">上线单列表</p>
         <div class="filter-container">
             <el-row :gutter="20"
                     justify="space-between">
                 <el-col :span="6">
-                    <el-button v-permission="`admin:user:add`"
+                    <el-button v-permission="`deploy:add`"
                                type="primary"
                                size="default"
                                plain
@@ -76,13 +76,13 @@
                              width="170px"
                              label="操作">
                 <template #default="{row}">
-                    <el-button v-permission="`admin:user:edit`"
+                    <el-button v-permission="`deploy:deploy`"
                                size="small"
                                :loading="row.status == 1"
                                type="primary"
                                @click="handleDeploy(row)">{{ row.status == 2 ?'查看':'上线'}}
                     </el-button>
-                    <el-button v-permission="`admin:user:del`"
+                    <el-button v-permission="`deploy:del`"
                                size="small"
                                type="danger"
                                @click="handleDel(row)">
@@ -128,7 +128,7 @@ const _getData = async () => {
     tableLoading.value = false
 }
 
-registerNotify('log_change', _getData)
+registerNotify('status_change', _getData)
 
 const {
     tableLoading,
@@ -140,12 +140,12 @@ const {
     handleCurrentChange
 } = usePage(_getData)
 
-// 添加项目
+// 添加上线单
 const handleAdd = () => {
     router.push('/deploy/add')
 }
 
-// 上线项目
+// 上线
 const deployDialog = ref(false)
 const deployData = ref({})
 const handleDeploy = async (info) => {
@@ -157,7 +157,7 @@ const handleDeploy = async (info) => {
     }
 }
 
-// 删除项目
+// 删除上线单
 const handleDel = async (info) => {
     await ElMessageBox.confirm('删除上线单不可恢复', '警告')
     const { message } = await del(info.id)

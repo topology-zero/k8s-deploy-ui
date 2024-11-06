@@ -42,7 +42,7 @@ const emit = defineEmits(['done'])
 const visible = defineModel('visible', { type: Boolean })
 const formData = defineModel('formData', { type: Object })
 
-// 添加 or 编辑项目提交
+// 添加 or 编辑模板提交
 const elFormRef = ref()
 const submitForm = async () => {
     await elFormRef.value.validate()
