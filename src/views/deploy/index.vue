@@ -117,7 +117,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import DoDeploy from './do-deploy.vue'
 
 const router = useRouter()
-const { websocketTarget, message } = useWebsocket()
+const { websocketTarget, logMessage, statusMessage } = useWebsocket()
 
 // 获取数据
 const _getData = async () => {
@@ -128,7 +128,7 @@ const _getData = async () => {
     tableLoading.value = false
 }
 
-registerNotify('done', _getData)
+registerNotify('log_change', _getData)
 
 const {
     tableLoading,
@@ -151,7 +151,8 @@ const deployData = ref({})
 const handleDeploy = async (info) => {
     deployDialog.value = true
     deployData.value = info
-    if (!message.value.has(info.id)) {
+    statusMessage.value.set(info.id, info.status)
+    if (!logMessage.value.has(info.id)) {
         websocketTarget.value.send(`{"msgType":"init","data":${info.id}}`)
     }
 }

@@ -2,9 +2,12 @@ import { onMounted, ref } from 'vue'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
 const websocketTarget = ref(null)
-const message = ref(new Map())
+const logMessage = ref(new Map())
+const statusMessage = ref(new Map())
+
 const notify = new Map()
-notify.set('done', [])
+notify.set('log_change', [])
+notify.set('status_change', [])
 
 export function registerNotify(key, fn) {
     if (!notify.has(key)) {
@@ -25,7 +28,7 @@ export function useWebsocket(address = 'ws://127.0.0.1:8888/websocket') {
         websocketTarget.value.onclose = onClose
     })
 
-    return { websocketTarget, message }
+    return { websocketTarget, logMessage, statusMessage }
 }
 
 const onMessage = (e) => {
@@ -33,24 +36,13 @@ const onMessage = (e) => {
         return
     }
 
-    if (e.data == 'done') {
-        notify.get('done').forEach(fn => fn())
-        return
+    const getMessage = JSON.parse(e.data)
+    if (getMessage.msgType == 'log_change') {
+        notify.get('log_change').map(fn => fn(getMessage.data))
     }
 
-    const getMessage = JSON.parse(e.data)
-    if (getMessage instanceof Array) {
-        getMessage.forEach(v => {
-            if (!message.value.has(v.id)) {
-                message.value.set(v.id, [])
-            }
-            message.value.get(v.id).push(v)
-        })
-    } else {
-        if (!message.value.has(getMessage.id)) {
-            message.value.set(getMessage.id, [])
-        }
-        message.value.get(getMessage.id).push(getMessage)
+    if (getMessage.msgType == 'status_change') {
+        notify.get('status_change').map(fn => fn(getMessage.data))
     }
 }
 
@@ -71,3 +63,16 @@ const onError = (e) => {
 const onClose = (e) => {
     console.log('onClose', e)
 }
+
+registerNotify('log_change', (data) => {
+    data.map(v => {
+        if (!logMessage.value.has(v.id)) {
+            logMessage.value.set(v.id, [])
+        }
+        logMessage.value.get(v.id).push(v)
+    })
+})
+
+registerNotify('status_change', (data) => {
+    statusMessage.value.set(data.pid, data.status)
+})

@@ -14,44 +14,67 @@
         </div>
         <template #footer>
             <el-button @click="visible = false">关 闭</el-button>
-            <el-button type="primary"
+            <el-button :type="butObj.type"
                        @click="submitForm()"
-                       :loading="submitLoding">{{ formData.status == 0 ? '上 线' :'重新上线'}}</el-button>
+                       :loading="deployStatus == 1">{{ butObj.text}}</el-button>
         </template>
     </el-dialog>
 </template>
 
 <script setup>
 import { watch, ref, nextTick, computed } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { deploy } from './api'
 import { useWebsocket } from '@/utils/mixin/websocket'
 
-const { message } = useWebsocket()
+const { logMessage, statusMessage } = useWebsocket()
 
 const visible = defineModel('visible', { type: Boolean })
 const formData = defineModel('formData', { type: Object })
 
 const messageInnerRef = ref()
-watch(message, async () => {
+watch(logMessage, async () => {
     await nextTick()
     messageInnerRef.value.scrollTop = messageInnerRef.value.scrollHeight
 }, { deep: true })
 
 const dialogMessage = computed(() => {
-    return message.value.get(formData.value.id, 1)
+    return logMessage.value.get(formData.value.id)
 })
 
-const submitLoding = ref(false)
-const submitForm = async () => {
-    submitLoding.value = true
-    try {
-        await deploy(formData.value.id)
-        visible.value = false
-        ElMessage.success('成功')
-    } finally {
-        submitLoding.value = false
+const deployStatus = computed(() => {
+    return statusMessage.value.get(formData.value.id)
+})
+
+const butObj = computed(() => {
+    switch (statusMessage.value.get(formData.value.id)) {
+        case 0: return {
+            text: '上线',
+            type: 'primary'
+        }
+        case 1: return {
+            text: '上线中',
+            type: 'default'
+        }
+        case 2: return {
+            text: '重新上线',
+            type: 'success'
+        }
+        case 3: return {
+            text: '重新上线',
+            type: 'warning'
+        }
     }
+    return {}
+})
+
+const submitForm = async () => {
+    if (deployStatus.value != 0) {
+        await ElMessageBox.confirm('是否重新上线', '警告')
+    }
+    await deploy(formData.value.id)
+    visible.value = false
+    ElMessage.success('成功')
 }
 
 const getLogColor = (type) => {
