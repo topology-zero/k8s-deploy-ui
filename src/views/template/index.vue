@@ -89,6 +89,9 @@ import { getList, del } from './api'
 import { usePage } from '@/utils/mixin/page'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddEditDialog from './add-edit-dialog.vue'
+import useDictStore from '@/store/dict'
+
+const dictStore = useDictStore()
 
 const defaultFormData = () => ({
     id: 0,
@@ -138,5 +141,6 @@ const handleDel = async (info) => {
     const { message } = await del(info.id)
     ElMessage.success(message)
     _getData(params)
+    dictStore.getTemplate()
 }
 </script>
