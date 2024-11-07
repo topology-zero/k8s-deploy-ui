@@ -27,7 +27,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { deploy } from './api'
 import { useWebsocket } from '@/utils/mixin/websocket'
 
-const { logMessage, statusMessage } = useWebsocket()
+const { logMessage, statusMessage } = useWebsocket(import.meta.env.VITE_APP_BASE_API + 'websocket')
 
 const visible = defineModel('visible', { type: Boolean })
 const formData = defineModel('formData', { type: Object })
