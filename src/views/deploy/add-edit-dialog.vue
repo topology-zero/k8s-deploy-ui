@@ -23,6 +23,7 @@
                           :rules="{ required: true, trigger: 'blur', message: '请输入使用模板' }"
                           prop="templateId">
                 <el-select v-model="formData.templateId"
+                           @change="templateChange"
                            style="width:100%">
                     <el-option v-for="val, key in templates"
                                :key="key"
@@ -31,10 +32,8 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="模板变量">
-                <el-button type="success"
-                           size="small"
-                           @click="formData.params.push({})">新增</el-button>
                 <el-table border
+                          empty-text="请先选择使用的模板"
                           style="margin-top: 10px;"
                           size="small"
                           :data="formData.params">
@@ -43,7 +42,7 @@
                                      prop="name">
                         <template #default="{row}">
                             <el-input v-model="row.name"
-                                      :disabled="row.name == 'tag' || row.name == 'namespace' "
+                                      disabled
                                       size="small" />
                         </template>
                     </el-table-column>
@@ -51,7 +50,7 @@
                                      label="参数值"
                                      prop="desc">
                         <template #default="{row}">
-                            <el-select v-if="row.name == 'tag' || row.name == 'namespace' "
+                            <el-select v-if="row.options"
                                        size="small"
                                        v-model="row.value"
                                        style="width:100%">
@@ -70,17 +69,6 @@
                                       size="small" />
                         </template>
                     </el-table-column>
-                    <el-table-column align="center"
-                                     width="170px"
-                                     label="操作">
-                        <template #default="{$index}">
-                            <el-button size="small"
-                                       type="danger"
-                                       @click="formData.params.splice($index, 1)">
-                                删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
                 </el-table>
             </el-form-item>
         </el-form>
@@ -94,8 +82,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 import { add } from './api'
+import { getProjectParams } from '@/api/common'
 import useDictStore from '@/store/dict'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
@@ -107,6 +96,21 @@ const { templates } = storeToRefs(dictStore)
 
 const visible = defineModel('visible', { type: Boolean })
 const formData = defineModel('formData', { type: Object })
+
+const templateChange = async (val) => {
+    const loading = ElLoading.service({
+        lock: true,
+        text: 'Loading',
+        target: document.body,
+        background: 'rgba(0, 0, 0, 0.7)'
+    })
+    try {
+        const { data } = await getProjectParams(formData.value.projectId, { templateId: val })
+        formData.value.params = data
+    } finally {
+        loading.close()
+    }
+}
 
 // 添加项目提交
 const elFormRef = ref()

@@ -8,7 +8,6 @@
             <div v-for="v in dialogMessage"
                  class="message-text"
                  :key="v">
-
                 <pre :style="{color: getLogColor(v.type)}">{{ v.createTime }} {{ v.message }}</pre>
             </div>
         </div>

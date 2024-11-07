@@ -24,8 +24,9 @@ export function getTemplate() {
     })
 }
 
-export function getProjectParams(id) {
+export function getProjectParams(id, params) {
     return request({
-        url: '/common/project/params/' + id
+        url: '/common/project/params/' + id,
+        params
     })
 }

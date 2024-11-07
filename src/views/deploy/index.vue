@@ -148,7 +148,7 @@ const handleAdd = () => {
 // 上线
 const deployDialog = ref(false)
 const deployData = ref({})
-const handleDeploy = async (info) => {
+const handleDeploy = (info) => {
     deployDialog.value = true
     deployData.value = info
     statusMessage.value.set(info.id, info.status)

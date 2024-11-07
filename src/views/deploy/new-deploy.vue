@@ -30,8 +30,6 @@ import { ref } from 'vue'
 import AddEditDialog from './add-edit-dialog.vue'
 import useDictStore from '@/store/dict'
 import { storeToRefs } from 'pinia'
-import { getProjectParams } from '@/api/common'
-import { ElLoading } from 'element-plus'
 
 const dictStore = useDictStore()
 const { project } = storeToRefs(dictStore)
@@ -39,25 +37,13 @@ const { project } = storeToRefs(dictStore)
 const dialogVisible = ref(false)
 const formData = ref({})
 const deploy = async (info) => {
-    const loading = ElLoading.service({
-        lock: true,
-        text: 'Loading',
-        target: document.body,
-        background: 'rgba(0, 0, 0, 0.7)'
-    })
     formData.value = {
         projectId: info.id,
         templateId: '',
         projectName: info.name,
         projectDesc: info.desc
     }
-    try {
-        const { data } = await getProjectParams(info.id)
-        formData.value.params = data
-        dialogVisible.value = true
-    } finally {
-        loading.close()
-    }
+    dialogVisible.value = true
 }
 </script>
 <style lang="scss" scoped>

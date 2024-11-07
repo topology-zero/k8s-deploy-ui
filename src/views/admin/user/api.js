@@ -9,8 +9,7 @@ export function getList(params) {
 
 export function getDetail(id) {
     return request({
-        url: '/user/' + id,
-        method: 'get'
+        url: '/user/' + id
     })
 }
 
