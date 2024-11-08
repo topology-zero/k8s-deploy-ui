@@ -90,6 +90,41 @@
                     </el-table-column>
                 </el-table>
             </el-form-item>
+            <el-form-item label="项目k8s模板">
+                <el-button type="success"
+                           size="small"
+                           @click="formData.template.push({name: '新增模板', value:''})">
+                    新增
+                </el-button>
+                <el-tabs type="border-card"
+                         tab-position="left"
+                         v-model="tabActive"
+                         style="margin-top: 10px; width: 100%;"
+                         closable
+                         v-if="formData.template.length > 0"
+                         @keydown.capture.delete.stop
+                         @tab-remove="handleTabReomve">
+                    <el-tab-pane v-for="(item, index) in formData.template"
+                                 :key="index"
+                                 :label="item.name"
+                                 :name="index">
+                        <template #label>
+                            <el-input v-model="item.name"
+                                      v-if="item.edit"
+                                      style="width: 64px; padding: 0"
+                                      size="small" />
+                            <div v-else> {{ item.name }} </div>
+                            <el-button type="primary"
+                                       text
+                                       :icon="item.edit ? Finished : Edit"
+                                       @click="item.edit=!item.edit"
+                                       size="small" />
+
+                        </template>
+                        <YamlEditor v-model="item.value" />
+                    </el-tab-pane>
+                </el-tabs>
+            </el-form-item>
         </el-form>
         <template #footer>
             <el-button @click="visible = false">取 消</el-button>
@@ -104,12 +139,19 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { add, edit } from './api'
 import useDictStore from '@/store/dict'
+import YamlEditor from '@/components/YamlEditor/index.vue'
+import { Edit, Finished } from '@element-plus/icons-vue'
 
 const dictStore = useDictStore()
 
 const emit = defineEmits(['done'])
 const visible = defineModel('visible', { type: Boolean })
 const formData = defineModel('formData', { type: Object })
+
+const tabActive = ref(0)
+const handleTabReomve = (targetName) => {
+    formData.value.template.splice(targetName, 1)
+}
 
 // 添加 or 编辑项目提交
 const elFormRef = ref()
@@ -133,4 +175,14 @@ const submitForm = async () => {
     ElMessage.success('成功')
 }
 </script>
-
+<style lang="scss" scoped>
+:deep(.el-tabs--left .el-tabs__header.is-left) {
+    margin-right: 0;
+}
+:deep(.el-tabs__content) {
+    padding: 0;
+}
+:deep(.el-input__inner:not(.el-select .el-input__inner)) {
+    padding: 0;
+}
+</style>

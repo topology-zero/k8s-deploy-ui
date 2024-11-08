@@ -21,17 +21,18 @@
             </el-form-item>
             <el-form-item label="使用模板"
                           :rules="{ required: true, trigger: 'blur', message: '请输入使用模板' }"
-                          prop="templateId">
-                <el-select v-model="formData.templateId"
+                          prop="template">
+                <el-select v-model="formData.template"
                            @change="templateChange"
                            style="width:100%">
-                    <el-option v-for="val, key in templates"
+                    <el-option v-for="val, key in projectInfo"
                                :key="key"
-                               :label="val.name"
-                               :value="val.id" />
+                               :label="val.templateName"
+                               :value="val.templateContent" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="模板变量">
+            <el-form-item label="模板变量"
+                          v-if="formData.params">
                 <el-table border
                           empty-text="请先选择使用的模板"
                           style="margin-top: 10px;"
@@ -81,35 +82,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
-import { add } from './api'
-import { getProjectParams } from '@/api/common'
-import useDictStore from '@/store/dict'
-import { storeToRefs } from 'pinia'
+import { add, getProjectDetail } from './api'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const dictStore = useDictStore()
-const { templates } = storeToRefs(dictStore)
-
 const visible = defineModel('visible', { type: Boolean })
 const formData = defineModel('formData', { type: Object })
 
-const templateChange = async (val) => {
+const projectInfo = ref()
+watch(() => formData.value.id, async (newVal) => {
     const loading = ElLoading.service({
         lock: true,
         text: 'Loading',
         target: document.body,
-        background: 'rgba(0, 0, 0, 0.7)'
+        background: 'rgba(0, 0, 0, 0.7)',
+        customClass: 'new-index'
     })
     try {
-        const { data } = await getProjectParams(formData.value.projectId, { templateId: val })
-        formData.value.params = data
+        const { data } = await getProjectDetail(newVal)
+        projectInfo.value = data
     } finally {
         loading.close()
     }
+})
+
+const templateChange = (val) => {
+    const selected = projectInfo.value.filter(v => val == v.templateContent)[0]
+    formData.value.params = selected.params
+    formData.value.templateName = selected.templateName
+    formData.value.templateContent = selected.templateContent
 }
 
 // 添加项目提交
@@ -129,4 +133,8 @@ const submitForm = async () => {
     router.push('/deploy/index')
 }
 </script>
-
+<style>
+.new-index {
+    z-index: 30000 !important;
+}
+</style>

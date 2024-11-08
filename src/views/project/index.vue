@@ -104,7 +104,8 @@ const defaultFormData = () => ({
     params: [
         { name: 'app_name', value: '' },
         { name: 'port', value: '8888' }
-    ]
+    ],
+    template: []
 })
 
 // data

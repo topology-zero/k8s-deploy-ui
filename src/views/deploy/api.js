@@ -29,3 +29,10 @@ export function del(id) {
         method: 'delete'
     })
 }
+
+export function getProjectDetail(id) {
+    return request({
+        url: '/deploy/project/' + id,
+        timeout: 0
+    })
+}

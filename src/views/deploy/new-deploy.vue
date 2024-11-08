@@ -38,8 +38,7 @@ const dialogVisible = ref(false)
 const formData = ref({})
 const deploy = async (info) => {
     formData.value = {
-        projectId: info.id,
-        templateId: '',
+        id: info.id,
         projectName: info.name,
         projectDesc: info.desc
     }
