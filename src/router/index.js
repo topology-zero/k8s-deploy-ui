@@ -140,6 +140,23 @@ const router = createRouter({
             ]
         },
         {
+            path: '/run',
+            component: Layout,
+            redirect: '/run/index',
+            name: 'run',
+            permission: 'run',
+            meta: { title: '运行', icon: 'run' },
+            children: [
+                {
+                    path: 'index',
+                    name: 'run-index',
+                    permission: 'run:index',
+                    component: () => import('@/views/run/index.vue'),
+                    meta: { title: '调试运行', icon: 'run' }
+                }
+            ]
+        },
+        {
             path: '/redirect',
             component: Layout,
             hidden: true,
