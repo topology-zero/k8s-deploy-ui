@@ -9,7 +9,7 @@
                  class="login-form"
                  label-position="left">
             <div class="title-container">
-                <h3 class="title">后台管理系统</h3>
+                <h3 class="title">K8S 部署管理平台</h3>
             </div>
             <el-form-item prop="username"
                           :rules="{ required: true, trigger: 'blur', message: '请输入用户名' }">
