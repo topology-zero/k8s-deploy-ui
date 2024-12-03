@@ -101,10 +101,7 @@ const defaultFormData = () => ({
     userName: '',
     token: '',
     useTag: '',
-    params: [
-        { name: 'app_name', value: '' },
-        { name: 'port', value: '8888' }
-    ],
+    params: [],
     template: []
 })
 

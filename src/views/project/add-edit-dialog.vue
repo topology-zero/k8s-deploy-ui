@@ -49,6 +49,7 @@
                 <el-table border
                           style="margin-top: 10px;"
                           size="small"
+                          v-if="formData.params.length > 0"
                           :data="formData.params">
                     <el-table-column align="center"
                                      label="参数名"
